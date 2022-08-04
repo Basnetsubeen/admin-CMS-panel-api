@@ -1,11 +1,30 @@
+import "dotenv/config";
 import express from "express";
+import cors from "cors";
+import helmet from "helmet";
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
-app.use("/", (req, res, next) => {
-  res.send("Welcome To New World");
+//Middlewares
+app.use(cors());
+app.use(helmet());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.json({
+    message: "Hi there, You got lost?",
+  });
 });
+app.use((error, req, res, next) => {
+  console.log(error);
+  const statusCode = error.status || 404;
+  res.status(statusCode).json({
+    status: "error",
+    message: error.message,
+  });
+});
+
 app.listen(PORT, (error) => {
   error && console.log(error);
   console.log(`Server running at http://localhost:${PORT}`);
