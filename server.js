@@ -6,6 +6,9 @@ import helmet from "helmet";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
+// Database connection
+import { dbConnection } from "./src/config/dbConfig.js";
+dbConnection();
 //Middlewares
 app.use(cors());
 app.use(helmet());

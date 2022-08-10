@@ -11,9 +11,9 @@ Content-Type: application/json
 {
     "fName": "Subin",
     "lName": "Basnet",
-    "email": "subin@basnet",
+    "email": "subin@basnet101010.com",
     "password": "subin",
     "phone": "98098098098",
     "address": "sydney",
-    "DOB": "20-22-2022"
+    "dob": "2020-12-12"
 }
