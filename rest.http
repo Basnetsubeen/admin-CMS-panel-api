@@ -5,3 +5,15 @@ GET http://localhost:8000/api/v1
 #======== Admin API ==========#
 
 ### Post new admin user
+POST http://localhost:8000/api/v1/admin-user
+Content-Type: application/json
+
+{
+    "fName": "Subin",
+    "lName": "Basnet",
+    "email": "subin@basnet",
+    "password": "subin",
+    "phone": "98098098098",
+    "address": "sydney",
+    "DOB": "20-22-2022"
+}
