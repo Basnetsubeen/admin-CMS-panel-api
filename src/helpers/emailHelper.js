@@ -41,7 +41,34 @@ export const verificationEmail = (emailData) => {
         <br />
         <br />
         <p> <a href ="${emailData.url}">verify email </a></p>
-        
+       
+        <br />
+        <p>Regards,  <br />
+        Subin Basnet
+        <br />
+        </p>
+       
+        `, // html body
+  };
+  emailProcessor(emailBody);
+};
+export const userVerificationNotification = (emailData) => {
+  const emailBody = {
+    from: '"Subin Store 👻" <basnetsubeen@gmail.com>', // sender address
+    to: emailData.email, // list of receivers
+    subject: "Your account has been verified", // Subject line
+    text: `Hi ${emailData.fName}, Your accout has been verified, You may login now. ${process.env.ROOT_DOMAIN}`, // Plain text body
+    html: `
+        <p>Hi ${emailData.fName}</p>
+        <br />
+        <br />
+        <p> Please follow the link to verify your email</p>
+        <br />
+        <br />
+        <p> <a href ="${process.env.ROOT_DOMAIN}">${process.env.ROOT_DOMAIN}</a></p>
+
+         <br />
+        <br />
         `, // html body
   };
   emailProcessor(emailBody);
