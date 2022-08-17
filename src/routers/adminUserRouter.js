@@ -15,6 +15,7 @@ import {
   userVerificationNotification,
   verificationEmail,
 } from "../helpers/emailHelper.js";
+import { createJWTs } from "../helpers/jwtHelper.js";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ const router = express.Router();
 //encrypt user password
 //insert into the db
 //create  unique verificaton code
-//send create a like pointin to our frontend with the email and verification code and send to their email
+//send create a like point in to our frontend with the email and verification code and send to their email
 
 router.post("/", newAdminUserValidation, async (req, res, next) => {
   try {
@@ -96,6 +97,7 @@ router.patch(
     }
   }
 );
+//Login admin
 router.post("/login", loginValidation, async (req, res, next) => {
   try {
     const { password, email } = req.body;
@@ -115,10 +117,15 @@ router.post("/login", loginValidation, async (req, res, next) => {
       if (isMatched) {
         user.password = undefined;
 
+        //JWT should be ready to login successfully
+
+        const jwts = await createJWTs({ email });
+
         return res.json({
           status: "success",
           message: "Login successfully",
           user,
+          ...jwts,
         });
       }
     }
