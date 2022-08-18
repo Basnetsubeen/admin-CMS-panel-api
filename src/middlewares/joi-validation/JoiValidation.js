@@ -7,6 +7,7 @@ import {
   PASSWORD,
   SHORTSTR,
   validator,
+  STATUS,
 } from "./constant.js";
 
 export const newAdminUserValidation = (req, res, next) => {
@@ -35,6 +36,17 @@ export const loginValidation = (req, res, next) => {
   const schmea = Joi.object({
     email: EMAIL.required(),
     password: PASSWORD.required(),
+  });
+  validator(schmea, req, res, next);
+};
+
+// =======Categories =========//
+export const newCategoryValidation = (req, res, next) => {
+  req.body.parentId = req.body.parentId ? req.body.parentId : null;
+  const schmea = Joi.object({
+    status: STATUS,
+    name: SHORTSTR.required(),
+    parentId: SHORTSTR.allow(null, ""),
   });
   validator(schmea, req, res, next);
 };

@@ -4,7 +4,7 @@ import {
   emailVerificationValidation,
   loginValidation,
   newAdminUserValidation,
-} from "../middlewares/joi-validation/adminUserValidation.js";
+} from "../middlewares/joi-validation/JoiValidation.js";
 import {
   findOneAdminUser,
   insertAdminUser,
@@ -103,15 +103,15 @@ router.post("/login", loginValidation, async (req, res, next) => {
     const { password, email } = req.body;
     // find the user exist based on given email
     const user = await findOneAdminUser({ email });
-
-    if (user?.status !== "active") {
-      res.json({
-        status: "error",
-        message:
-          "Your account has not been verified, please check your email and verify your account.",
-      });
-    }
     if (user?._id) {
+      if (user?.status !== "active") {
+        res.json({
+          status: "error",
+          message:
+            "Your account has not been verified, please check your email and verify your account.",
+        });
+      }
+
       //we need to verify if the password send by the user and the hashed password store in the database is same
       const isMatched = comparePassword(password, user.password);
       if (isMatched) {
