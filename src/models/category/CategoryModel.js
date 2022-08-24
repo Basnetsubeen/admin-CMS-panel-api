@@ -14,7 +14,16 @@ export const getAllCategories = () => {
 export const getCategoryById = (_id) => {
   return CategorySchema.findById(_id);
 };
+//update a catergory
+export const updateCategoryById = ({ _id, ...update }) => {
+  return CategorySchema.findByIdAndUpdate(_id, update, { new: true });
+};
+//update a catergory by child
+export const hasChildCategoryById = async (parentId) => {
+  const category = await CategorySchema.findOne({ parentId });
+  return category?._id ? true : false;
+};
 //delete category
-export const deleteCategory = (_id) => {
-  return CategorySchema.findOneAndDelete(_id);
+export const deleteCategorybyId = (_id) => {
+  return CategorySchema.findByIdAndDelete(_id);
 };

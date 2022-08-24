@@ -50,3 +50,15 @@ export const newCategoryValidation = (req, res, next) => {
   });
   validator(schmea, req, res, next);
 };
+
+//update cateogory
+export const updateCategoryValidation = (req, res, next) => {
+  req.body.parentId = req.body.parentId ? req.body.parentId : null;
+  const schmea = Joi.object({
+    status: STATUS,
+    name: SHORTSTR.required(),
+    parentId: SHORTSTR.allow(null, ""),
+    _id: SHORTSTR.required(),
+  });
+  validator(schmea, req, res, next);
+};

@@ -1,10 +1,15 @@
 import express from "express";
-import { newCategoryValidation } from "../middlewares/joi-validation/JoiValidation.js";
 import {
-  deleteCategory,
+  newCategoryValidation,
+  updateCategoryValidation,
+} from "../middlewares/joi-validation/JoiValidation.js";
+import {
+  deleteCategorybyId,
   getAllCategories,
   getCategoryById,
+  hasChildCategoryById,
   insertCategory,
+  updateCategoryById,
 } from "../models/category/CategoryModel.js";
 import slugify from "slugify";
 
@@ -51,24 +56,59 @@ router.post("/", newCategoryValidation, async (req, res, next) => {
     next(error);
   }
 });
-//Get Categories
+//Delete Categories
+
+//Update category
+router.put("/", updateCategoryValidation, async (req, res, next) => {
+  try {
+    const hasChildCategory = await hasChildCategoryById(req.body);
+    if (hasChildCategory) {
+      return res.json({
+        status: "error",
+        message:
+          "This category has a child categories, please delete or re assign them to another category before taking the action",
+      });
+    }
+    const categoryUpdate = await updateCategoryById(req.body);
+
+    categoryUpdate?._id
+      ? res.json({
+          status: "success",
+          message: "Category has been upated",
+        })
+      : res.json({
+          status: "error",
+          message: "Unable to add the category, please try again",
+        });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//Delete category
 router.delete("/:_id", async (req, res, next) => {
   try {
     const { _id } = req.params;
-    const result = await deleteCategory(_id);
-    if (result._id) {
+    const hasChildCategory = await hasChildCategoryById(_id);
+    if (hasChildCategory) {
       return res.json({
-        status: "success",
-        message: "The transaction has been deleted",
+        status: "error",
+        message:
+          "This category has a child categories, please delete or re assign them to another category before taking the action",
       });
     }
+    const categoryDelete = await deleteCategorybyId(_id);
 
-    res.json({
-      status: "error",
-      message: "Invalid user",
-    });
+    categoryDelete?._id
+      ? res.json({
+          status: "success",
+          message: "Category has been upated",
+        })
+      : res.json({
+          status: "error",
+          message: "Unable to add the category, please try again",
+        });
   } catch (error) {
-    error.status = 500;
     next(error);
   }
 });
