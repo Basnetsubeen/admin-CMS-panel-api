@@ -56,7 +56,6 @@ router.post("/", newCategoryValidation, async (req, res, next) => {
     next(error);
   }
 });
-//Delete Categories
 
 //Update category
 router.put("/", updateCategoryValidation, async (req, res, next) => {

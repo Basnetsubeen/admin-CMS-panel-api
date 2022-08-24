@@ -39,3 +39,4 @@ Content-Type: application/json
 
 ### ======= get All Categories ======
 GET http://localhost:8000/api/v1/category
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5leW1hckAxMS5jb20iLCJpYXQiOjE2NjEzMTU4MjAsImV4cCI6MTY2MTMxNjcyMH0.iJlbLW4Nz5Qt0lJoNKEKPd6ikSRqKEUQqmLo89i4AcM

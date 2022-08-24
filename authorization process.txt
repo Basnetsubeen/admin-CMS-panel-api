@@ -7,3 +7,11 @@
 4. store token in the browser session
   a. accessJWT goes in the sessionStorage = store until the browser is open
   b. refresh goes in the localStorage = stores forever until we delete
+
+  step 2: protect server
+  1. Recieve accessJWT as a authorization header
+  2. Verify if accessJWT is valid
+  3. Verify if accessJWT exist in the session table
+  4. Then, get the user info by email which is avaiable through jwt decode
+  5. do next()
+  6. If any of the step fails above, return unauthorization error message
