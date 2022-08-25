@@ -15,7 +15,12 @@ import {
   userVerificationNotification,
   verificationEmail,
 } from "../helpers/emailHelper.js";
-import { createJWTs } from "../helpers/jwtHelper.js";
+import {
+  createJWTs,
+  singleAccessJWT,
+  verifyRefreshJWT,
+} from "../helpers/jwtHelper.js";
+import { adminAuth } from "../middlewares/auth-middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -25,7 +30,21 @@ const router = express.Router();
 //create  unique verificaton code
 //send create a like point in to our frontend with the email and verification code and send to their email
 
-router.post("/", newAdminUserValidation, async (req, res, next) => {
+//get userAdmin
+router.get("/", adminAuth, (req, res, next) => {
+  try {
+    const user = req.adminInfo;
+    res.json({
+      status: "success",
+      messsage: " to-do",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/", adminAuth, newAdminUserValidation, async (req, res, next) => {
   try {
     const { password } = req.body; //Fronted password
 
@@ -65,6 +84,7 @@ router.post("/", newAdminUserValidation, async (req, res, next) => {
     next(error);
   }
 });
+
 //to verify the email
 router.patch(
   "/verify-email",
@@ -139,4 +159,37 @@ router.post("/login", loginValidation, async (req, res, next) => {
     next(error);
   }
 });
+
+//Generates new accessJWT and send back to the client
+router.get("/accessjwt", async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    if (authorization) {
+      //verify the token
+      const decoded = verifyRefreshJWT(authorization);
+      console.log(decoded);
+
+      //check if the exist in db
+      if (decoded.email) {
+        const user = await findOneAdminUser({ email: decoded.email });
+        if (user?._id) {
+          //create new accessjwt and return
+
+          return res.json({
+            status: "success",
+            accessJWT: await singleAccessJWT({ email: decoded.email }),
+          });
+        }
+      }
+    }
+    res.status(401).json({
+      status: "error",
+      message: "Unauthenticatd",
+    });
+  } catch (error) {
+    error.status = 401;
+    next(error);
+  }
+});
+
 export default router;

@@ -15,3 +15,7 @@
   4. Then, get the user info by email which is avaiable through jwt decode
   5. do next()
   6. If any of the step fails above, return unauthorization error message
+
+  Front auto login
+  case 1. when you are refreshing the same window
+  case 2. when you open link to a new tab or come back and re visit the site

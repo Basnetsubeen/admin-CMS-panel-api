@@ -27,6 +27,10 @@ Content-Type: application/json
 
 }
 
+### Get new accessJWT 
+GET http://localhost:8000/api/v1/admin-user/accessjwt
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5leW1hckAxMS5jb20iLCJpYXQiOjE2NjEzODk4ODEsImV4cCI6MTY2Mzk4MTg4MX0.i7Jb8WmqsErOQwCFmNqkbxKxB6kfxb-37wphG0mielc
+
 ### ========= Category ==============####
 POST http://localhost:8000/api/v1/category
 Content-Type: application/json
