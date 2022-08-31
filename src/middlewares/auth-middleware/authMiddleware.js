@@ -1,5 +1,5 @@
 import { verifyAccessJWT } from "../../helpers/jwtHelper.js";
-import { findOneAdminUser } from "../../models/AdminUserModel.js";
+import { findOneAdminUser } from "../../models/adminUser/AdminUserModel.js";
 import { getSession } from "../../models/session/SessonModel.js";
 
 export const adminAuth = async (req, res, next) => {

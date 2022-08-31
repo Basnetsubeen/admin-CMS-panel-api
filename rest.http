@@ -44,3 +44,31 @@ Content-Type: application/json
 ### ======= get All Categories ======
 GET http://localhost:8000/api/v1/category
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5leW1hckAxMS5jb20iLCJpYXQiOjE2NjEzMTU4MjAsImV4cCI6MTY2MTMxNjcyMH0.iJlbLW4Nz5Qt0lJoNKEKPd6ikSRqKEUQqmLo89i4AcM
+
+
+### ==========payment Method =========###
+### GET
+GET http://localhost:8000/api/v1/payment-method
+
+### POST
+POST http://localhost:8000/api/v1/payment-method
+Content-Type: application/json
+
+{
+    "status": "inactive",
+    "name": "Pay by credit card",
+    "description": "Follow the instruction to pay by credit card, AMEX not support"
+}
+
+### UPDATE
+PUT http://localhost:8000/api/v1/payment-method
+Content-Type: application/json
+
+{
+    "_id": "6306fc2284ee78691632433d",
+    "status": "active",
+    "name": "Pay by credit card ",
+    "description": "Follow the instruction to pay by credit card"
+}
+### Delete
+DELETE  http://localhost:8000/api/v1/payment-method/6306fc2284ee78691632433d

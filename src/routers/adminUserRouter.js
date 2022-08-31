@@ -9,7 +9,7 @@ import {
   findOneAdminUser,
   insertAdminUser,
   updatOneAdminUser,
-} from "../models/AdminUserModel.js";
+} from "../models/adminUser/AdminUserModel.js";
 import { v4 as uuidv4 } from "uuid";
 import {
   userVerificationNotification,
