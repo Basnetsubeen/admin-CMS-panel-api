@@ -11,6 +11,8 @@ export const DOB = Joi.date();
 
 export const SHORTSTR = Joi.string().max(100);
 export const LONGSTR = Joi.string().max(50000);
+export const NUMBER = Joi.number();
+export const DATE = Joi.date();
 
 export const validator = (schema, req, res, next) => {
   const { error } = schema.validate(req.body);

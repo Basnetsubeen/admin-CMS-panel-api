@@ -72,3 +72,23 @@ Content-Type: application/json
 }
 ### Delete
 DELETE  http://localhost:8000/api/v1/payment-method/6306fc2284ee78691632433d
+
+### =======products api==========#
+### Get products
+GET  http://localhost:8000/api/v1/product
+
+### Post products
+POST  http://localhost:8000/api/v1/product
+Content-Type: application/json
+
+{
+    "name": "Mac book pro",
+    "sku": "c-14",
+    "description": "This is best selling laptop",
+    "quantity": 100,
+    "price": 3000,
+    "salesPrice": 0,
+    "salesStartDate": null,
+    "salesEndDate": null,
+    "catId": "6305666feb7e2d255da263f6"
+}

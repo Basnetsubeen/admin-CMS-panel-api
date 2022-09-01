@@ -9,6 +9,8 @@ import {
   validator,
   STATUS,
   LONGSTR,
+  NUMBER,
+  DATE,
 } from "./constant.js";
 
 export const newAdminUserValidation = (req, res, next) => {
@@ -79,6 +81,30 @@ export const updatePaymentMethodValidation = (req, res, next) => {
     status: STATUS.required(),
     name: SHORTSTR.required(),
     description: LONGSTR.required(),
+  });
+  validator(schmea, req, res, next);
+};
+
+//  ======== products validation ========
+export const newProductValidation = (req, res, next) => {
+  const { salesPrice, salesStartDate, salesEndDate } = req.body;
+  req.body.salesPrice = salesPrice ? salesPrice : 0;
+  req.body.salesStartDate =
+    !salesStartDate || salesStartDate === "null" ? null : salesStartDate;
+  req.body.salesEndDate =
+    !salesEndDate || salesEndDate === "null" ? null : salesEndDate;
+
+  const schmea = Joi.object({
+    status: STATUS.required(),
+    name: SHORTSTR.required(),
+    sku: SHORTSTR.required(),
+    description: LONGSTR.required(),
+    quantity: NUMBER.required(),
+    price: NUMBER.required(),
+    salesPrice: NUMBER,
+    salesStartDate: DATE.allow(null),
+    salesEndDate: DATE.allow(null),
+    catId: SHORTSTR.required(),
   });
   validator(schmea, req, res, next);
 };
