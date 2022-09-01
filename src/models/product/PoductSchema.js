@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema(
       required: true,
       maxLength: 5000,
     },
-    categoryId: {
+    catId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "category",
       default: null,
@@ -46,6 +46,7 @@ const productSchema = new mongoose.Schema(
     ],
     thumbnail: {
       type: String,
+      default: "",
     },
     price: {
       type: Number,
@@ -65,7 +66,7 @@ const productSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    ratings: {
+    rating: {
       type: Number,
       max: 5,
       dafault: 5,
