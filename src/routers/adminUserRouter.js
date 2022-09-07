@@ -4,6 +4,7 @@ import {
   emailVerificationValidation,
   loginValidation,
   newAdminUserValidation,
+  updateAdminPasswordUserValidation,
   updateAdminUserValidation,
 } from "../middlewares/joi-validation/JoiValidation.js";
 import {
@@ -112,7 +113,54 @@ router.put(
     }
   }
 );
+//update password from user profile case
+router.patch(
+  "/",
+  adminAuth,
+  updateAdminPasswordUserValidation,
+  async (req, res, next) => {
+    try {
+      const { password, _id, newPassword } = req.body;
+      const userId = req.adminInfo._id.toString();
+      if (_id !== userId) {
+        return res.status(401).json({
+          status: "error",
+          message: "Invalid user request",
+        });
+      }
+      const passFromDb = req.adminInfo.password;
+      //first if the password is valid
+      const isMatched = comparePassword(password, passFromDb);
+      //encrypt the new password
+      if (isMatched) {
+        //update the password in the db
+        const hashedPassword = hashPassword(newPassword);
+        const result = await updatOneAdminUser(
+          { _id },
+          {
+            password: hashedPassword,
+          }
+        );
 
+        if (result?._id) {
+          return res.json({
+            status: "success",
+            message: "Password has been successfully updated",
+          });
+        }
+      }
+
+      // const result = await updatOneAdminUser();
+
+      res.json({
+        status: "error",
+        message: "Unable to update the passsord. please try again!!",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 //public routers below here
 
 //to verify the email
