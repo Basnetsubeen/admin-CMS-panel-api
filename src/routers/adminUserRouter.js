@@ -4,6 +4,7 @@ import {
   emailVerificationValidation,
   loginValidation,
   newAdminUserValidation,
+  updateAdminUserValidation,
 } from "../middlewares/joi-validation/JoiValidation.js";
 import {
   findOneAdminUser,
@@ -34,6 +35,8 @@ const router = express.Router();
 router.get("/", adminAuth, (req, res, next) => {
   try {
     const user = req.adminInfo;
+    user.password = undefined;
+    user.refreshJWT = undefined;
     res.json({
       status: "success",
       messsage: " to-do",
@@ -84,6 +87,33 @@ router.post("/", adminAuth, newAdminUserValidation, async (req, res, next) => {
     next(error);
   }
 });
+
+router.put(
+  "/",
+  adminAuth,
+  updateAdminUserValidation,
+  async (req, res, next) => {
+    try {
+      const { _id, ...rest } = req.body;
+
+      const result = await updatOneAdminUser({ _id }, rest);
+
+      result?._id
+        ? res.json({
+            status: "success",
+            message: "The user has been updated",
+          })
+        : res.json({
+            status: "error",
+            message: "Unable to update the user profile, Please try again!!",
+          });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//public routers below here
 
 //to verify the email
 router.patch(

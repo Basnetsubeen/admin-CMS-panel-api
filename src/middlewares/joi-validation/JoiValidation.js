@@ -11,6 +11,7 @@ import {
   LONGSTR,
   NUMBER,
   DATE,
+  PHONE,
 } from "./constant.js";
 
 export const newAdminUserValidation = (req, res, next) => {
@@ -20,6 +21,19 @@ export const newAdminUserValidation = (req, res, next) => {
     lName: LNAME.required(),
     email: EMAIL.required(),
     password: PASSWORD.required(),
+    phone: PHONE,
+    address: ADDRESS,
+    dob: DATE.allow("", null),
+  });
+  //give data to the rules
+  validator(schmea, req, res, next);
+};
+export const updateAdminUserValidation = (req, res, next) => {
+  //define rules
+  const schmea = Joi.object({
+    _id: SHORTSTR.required(),
+    fName: FNAME.required(),
+    lName: LNAME.required(),
     phone: PHONE,
     address: ADDRESS,
     dob: DATE.allow("", null),
@@ -105,6 +119,31 @@ export const newProductValidation = (req, res, next) => {
     salesStartDate: DATE.allow(null),
     salesEndDate: DATE.allow(null),
     catId: SHORTSTR.required(),
+  });
+  validator(schmea, req, res, next);
+};
+export const updateProductValidation = (req, res, next) => {
+  const { salesPrice, salesStartDate, salesEndDate } = req.body;
+  req.body.salesPrice = salesPrice ? salesPrice : 0;
+  req.body.salesStartDate =
+    !salesStartDate || salesStartDate === "null" ? null : salesStartDate;
+  req.body.salesEndDate =
+    !salesEndDate || salesEndDate === "null" ? null : salesEndDate;
+
+  const schmea = Joi.object({
+    _id: SHORTSTR.required(),
+    status: STATUS.required(),
+    name: SHORTSTR.required(),
+    description: LONGSTR.required(),
+    quantity: NUMBER.required(),
+    price: NUMBER.required(),
+    salesPrice: NUMBER,
+    salesStartDate: DATE.allow(null),
+    salesEndDate: DATE.allow(null),
+    catId: SHORTSTR.required(),
+    images: LONGSTR.required(),
+    thumbnail: LONGSTR.required(),
+    imgToDelete: LONGSTR.allow(""),
   });
   validator(schmea, req, res, next);
 };
