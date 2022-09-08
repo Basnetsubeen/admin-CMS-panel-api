@@ -4,6 +4,7 @@ import {
   emailVerificationValidation,
   loginValidation,
   newAdminUserValidation,
+  resetAdminPasswordUserValidation,
   updateAdminPasswordUserValidation,
   updateAdminUserValidation,
 } from "../middlewares/joi-validation/JoiValidation.js";
@@ -14,6 +15,7 @@ import {
 } from "../models/adminUser/AdminUserModel.js";
 import { v4 as uuidv4 } from "uuid";
 import {
+  otpNotification,
   userVerificationNotification,
   verificationEmail,
 } from "../helpers/emailHelper.js";
@@ -23,6 +25,8 @@ import {
   verifyRefreshJWT,
 } from "../helpers/jwtHelper.js";
 import { adminAuth } from "../middlewares/auth-middleware/authMiddleware.js";
+import { createOTP } from "../utils/randonGenerator.js";
+import { deleteSession, insertSession } from "../models/session/SessonModel.js";
 
 const router = express.Router();
 
@@ -269,5 +273,84 @@ router.get("/accessjwt", async (req, res, next) => {
     next(error);
   }
 });
+
+//password restet as logout user
+router.post("/request-password-reset-otp", async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if (email.includes("@")) {
+      //check if the user exist
+      const user = await findOneAdminUser({ email });
+      if (user?._id) {
+        //create the unique code and store in the database with the email
+
+        const object = {
+          token: createOTP(),
+          associate: email,
+          type: "updatePassword",
+        };
+        const result = await insertSession(object);
+        if (result?._id) {
+          //create unique otp for the for the frontend that takes user to password update page
+          //email the otp to the client
+          otpNotification({
+            otp: result.token,
+            fName: result.associate,
+            email,
+          });
+        }
+      }
+    }
+
+    res.json({
+      status: "success",
+      message:
+        "If the email exist in our system, we will send you an OTP, email and  reset instruction",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+//reset password
+router.patch(
+  "/reset-password",
+  resetAdminPasswordUserValidation,
+  async (req, res, next) => {
+    try {
+      const { email, otp, password } = req.body;
+      const filter = {
+        token: otp,
+        associate: email,
+        type: "updatePassword",
+      };
+      //find if the filter exist in the session table and delete it.
+
+      const result = await deleteSession(filter);
+      //if the delete is succeed,
+      if (result?._id) {
+        //then, encrypt the password and update the user table by ID
+        const encrypted = hashPassword(password);
+
+        const user = await updatOneAdminUser(
+          { email },
+          { password: encrypted }
+        );
+        if (user?._id) {
+          return res.json({
+            status: "success",
+            message: "The password has been updated",
+          });
+        }
+      }
+      res.json({
+        status: "error",
+        message: "Invalid request",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;

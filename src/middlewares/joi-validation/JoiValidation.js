@@ -51,6 +51,16 @@ export const updateAdminPasswordUserValidation = (req, res, next) => {
   //give data to the rules
   validator(schmea, req, res, next);
 };
+export const resetAdminPasswordUserValidation = (req, res, next) => {
+  //define rules
+  const schmea = Joi.object({
+    email: EMAIL.required(),
+    password: SHORTSTR.required(),
+    otp: NUMBER.required(),
+  });
+  //give data to the rules
+  validator(schmea, req, res, next);
+};
 
 export const emailVerificationValidation = (req, res, next) => {
   const schmea = Joi.object({

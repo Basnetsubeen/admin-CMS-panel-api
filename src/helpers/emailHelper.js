@@ -73,3 +73,27 @@ export const userVerificationNotification = (emailData) => {
   };
   emailProcessor(emailBody);
 };
+//send otp to the user email
+export const otpNotification = (emailData) => {
+  const emailBody = {
+    from: '"Subin Store 👻" <basnetsubeen@gmail.com>', // sender address
+    to: emailData.email, // list of receivers
+    subject: "OTP for password reset", // Subject line
+    text: `Hi ${emailData.fName}, Please use the following OTP to reset your password: ${emailData.otp}`, // Plain text body
+    html: `
+        <p>Hi ${emailData.fName}</p>
+        <br />
+        <br />
+        <p> Please use the following OTP to reset your new password</p>
+        <br />
+        <br />
+        <p>${emailData.otp}</p>
+         <br />
+        <br />
+        <p>Regards,  <br />
+        Subin Basnet
+        <br />
+        `, // html body
+  };
+  emailProcessor(emailBody);
+};

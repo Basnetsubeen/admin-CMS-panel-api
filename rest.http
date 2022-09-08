@@ -31,6 +31,16 @@ Content-Type: application/json
 GET http://localhost:8000/api/v1/admin-user/accessjwt
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5leW1hckAxMS5jb20iLCJpYXQiOjE2NjEzODk4ODEsImV4cCI6MTY2Mzk4MTg4MX0.i7Jb8WmqsErOQwCFmNqkbxKxB6kfxb-37wphG0mielc
 
+
+### request otp for passwored reset
+POST http://localhost:8000/api/v1/admin-user/request-password-reset-otp
+Content-Type: application/json
+
+{
+"email": "neymar@11.com"
+}
+
+
 ### ========= Category ==============####
 POST http://localhost:8000/api/v1/category
 Content-Type: application/json
